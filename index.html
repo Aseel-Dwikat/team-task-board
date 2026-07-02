@@ -62,7 +62,23 @@
 
   <div id="taskBoard"></div>
 
+
+
+  <div id="confirmOverlay" class="modal-overlay hidden">
+    <div class="modal-box">
+      <div class="modal-icon">🗑️</div>
+      <h2>Delete Task?</h2>
+      <p id="confirmMessage">Are you sure you want to delete this task?</p>
+      <div class="modal-actions">
+        <button type="button" id="confirmCancelBtn">Cancel</button>
+        <button type="button" id="confirmDeleteBtn" class="danger-btn">Delete</button>
+      </div>
+    </div>
+  </div>
+
   <script type="module" src="./dist/app.js"></script>
 
+</body>
+</html>
 </body>
 </html>

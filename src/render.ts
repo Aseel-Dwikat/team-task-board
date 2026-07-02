@@ -9,7 +9,7 @@ export interface RenderCallbacks {
 const STATUS_OPTIONS: Status[] = ["To Do", "In Progress", "Done"];
 
 function priorityClass(priority: Task["priority"]): string {
-  return priority.toLowerCase(); // "low" | "medium" | "high"
+  return priority.toLowerCase(); 
 }
 
 function formatDate(dateStr: string): string {
@@ -25,6 +25,37 @@ function escapeHtml(str: string): string {
   return div.innerHTML;
 }
 
+export function playDeleteAnimation(container: HTMLElement, id: string): Promise<void> {
+  return new Promise((resolve) => {
+    const card = container.querySelector<HTMLElement>(`.task-card[data-id="${id}"]`);
+    if (!card) {
+      resolve();
+      return;
+    }
+
+    card.classList.add("card-exit");
+
+    const fallback = setTimeout(resolve, 350);
+    card.addEventListener(
+      "animationend",
+      () => {
+        clearTimeout(fallback);
+        resolve();
+      },
+      { once: true }
+    );
+  });
+}
+
+export function playStatusPulse(container: HTMLElement, id: string): void {
+  const card = container.querySelector<HTMLElement>(`.task-card[data-id="${id}"]`);
+  if (!card) return;
+  card.classList.add("status-pulse");
+  card.addEventListener("animationend", () => card.classList.remove("status-pulse"), {
+    once: true,
+  });
+}
+
 export function renderTasks(
   container: HTMLElement,
   tasks: Task[],
@@ -35,19 +66,20 @@ export function renderTasks(
 
   if (tasks.length === 0) {
     const emptyMessage = hasActiveFilters
-     ? "No matching tasks found."
-     : "No tasks available. Add a new task to get started!";
+      ? "No tasks match your search or filters."
+      : "No tasks yet. Start by adding a new task!";
     const emptyDiv = document.createElement("div");
     emptyDiv.className = "empty-state";
     emptyDiv.textContent = emptyMessage;
     container.appendChild(emptyDiv);
     return;
   }
-console.log("RENDER TASKS:", tasks);
-  for (const task of tasks) {
+
+  tasks.forEach((task, index) => {
     const card = document.createElement("div");
     card.className = `task-card ${priorityClass(task.priority)}`;
     card.dataset.id = task.id;
+    card.style.animationDelay = `${Math.min(index, 10) * 0.05}s`;
 
     card.innerHTML = `
       <h3>${escapeHtml(task.title)}</h3>
@@ -70,9 +102,8 @@ console.log("RENDER TASKS:", tasks);
     `;
 
     container.appendChild(card);
-  }
+  });
 
-  // نربط الأحداث مرة وحدة بعد ما نبني كل الكروت (event delegation)
   container.querySelectorAll<HTMLButtonElement>(".edit-btn").forEach((btn) => {
     btn.addEventListener("click", () => callbacks.onEdit(btn.dataset.id!));
   });

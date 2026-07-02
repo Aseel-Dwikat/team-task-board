@@ -1,6 +1,6 @@
 import { getTasks, addTask, updateTask, deleteTask, updateTaskStatus } from "./storage.js";
-import { renderTasks } from "./render.js";
-// elements
+import { renderTasks, playDeleteAnimation, playStatusPulse } from "./render.js";
+import { confirmDialog } from "./modal.js";
 const form = document.getElementById("taskForm");
 const taskIdInput = document.getElementById("taskId");
 const titleInput = document.getElementById("title");
@@ -10,16 +10,13 @@ const priorityInput = document.getElementById("priority");
 const dueDateInput = document.getElementById("dueDate");
 const submitBtn = document.getElementById("submitBtn");
 const cancelEditBtn = document.getElementById("cancelEditBtn");
-//elemments for filters
 const searchInput = document.getElementById("searchInput");
 const statusFilter = document.getElementById("statusFilter");
 const priorityFilter = document.getElementById("priorityFilter");
 const sortSelect = document.getElementById("sortSelect");
 const clearFiltersBtn = document.getElementById("clearFiltersBtn");
 const taskBoard = document.getElementById("taskBoard");
-// state of app
 let editingTaskId = null;
-// validation 
 function clearFieldError(el) {
     el.classList.remove("field-error");
 }
@@ -104,12 +101,13 @@ form.addEventListener("submit", (e) => {
     }
     refreshBoard();
 });
-function handleDelete(id) {
+async function handleDelete(id) {
     const task = getTasks().find((t) => t.id === id);
     const taskName = task ? task.title : "this task";
-    const confirmed = window.confirm(`Are you sure you want to delete "${taskName}"?`);
+    const confirmed = await confirmDialog(`Are you sure you want to delete "${taskName}"?`);
     if (!confirmed)
         return;
+    await playDeleteAnimation(taskBoard, id);
     deleteTask(id);
     if (editingTaskId === id)
         exitEditMode();
@@ -122,7 +120,11 @@ function handleEdit(id) {
 }
 function handleStatusChange(id, status) {
     updateTaskStatus(id, status);
-    refreshBoard();
+    if (statusFilter.value && statusFilter.value !== status) {
+        refreshBoard();
+        return;
+    }
+    playStatusPulse(taskBoard, id);
 }
 function getFilteredAndSortedTasks() {
     let tasks = getTasks();

@@ -11,13 +11,3 @@ export interface Task {
   dueDate: string; // yyyy-mm-dd
   createdAt: string; // timestamp
 }
-
-
-export interface TaskFormData {
-  title: string;
-  description: string;
-  assignee: string;
-  priority: Priority;
-  status: Status;
-  dueDate: string;
-}

@@ -13,9 +13,20 @@ h1 {
   text-align: center;
   margin-bottom: 20px;
   color: #222;
+  animation: dropIn 0.5s ease;
 }
 
-/* ===== Form ===== */
+@keyframes dropIn {
+  from {
+    opacity: 0;
+    transform: translateY(-25px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 form {
   display: flex;
   flex-wrap: wrap;
@@ -26,6 +37,7 @@ form {
   padding: 15px;
   border-radius: 10px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  animation: dropIn 0.5s ease 0.1s backwards;
 }
 
 form input,
@@ -37,6 +49,16 @@ form select {
   width: 200px;
   font-family: inherit;
   font-size: 14px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
+}
+
+form input:focus,
+form textarea:focus,
+form select:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.15);
+  transform: translateY(-1px);
 }
 
 form textarea {
@@ -44,10 +66,18 @@ form textarea {
   height: 40px;
 }
 
-/* حقل فيه خطأ (Validation) */
 .field-error {
   border: 2px solid #dc3545 !important;
   background-color: #fff5f5;
+  animation: shake 0.4s ease;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-6px); }
+  40% { transform: translateX(6px); }
+  60% { transform: translateX(-4px); }
+  80% { transform: translateX(4px); }
 }
 
 .form-buttons {
@@ -63,25 +93,33 @@ form button {
   border-radius: 6px;
   cursor: pointer;
   font-size: 14px;
+  transition: background-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
 }
 
 form button:hover {
   background-color: #0056b3;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
+}
+
+form button:active {
+  transform: translateY(0) scale(0.96);
 }
 
 #cancelEditBtn {
   background-color: #6c757d;
+  animation: dropIn 0.3s ease;
 }
 
 #cancelEditBtn:hover {
   background-color: #545b62;
+  box-shadow: 0 4px 10px rgba(108, 117, 125, 0.3);
 }
 
 .hidden {
   display: none !important;
 }
 
-/* ===== Toolbar (Search / Filter / Sort) ===== */
 .toolbar {
   display: flex;
   flex-wrap: wrap;
@@ -92,6 +130,7 @@ form button:hover {
   padding: 12px;
   border-radius: 10px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  animation: dropIn 0.5s ease 0.2s backwards;
 }
 
 .toolbar input,
@@ -101,6 +140,14 @@ form button:hover {
   border: 1px solid #ccc;
   border-radius: 6px;
   font-size: 14px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease, background-color 0.2s ease;
+}
+
+.toolbar input:focus,
+.toolbar select:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.15);
 }
 
 .toolbar button {
@@ -111,9 +158,13 @@ form button:hover {
 
 .toolbar button:hover {
   background-color: #ddd;
+  transform: translateY(-2px) rotate(-1deg);
 }
 
-/* ===== Task Board ===== */
+.toolbar button:active {
+  transform: translateY(0) scale(0.95);
+}
+
 #taskBoard {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -121,7 +172,6 @@ form button:hover {
   padding: 10px;
 }
 
-/* ===== Task Card ===== */
 .task-card {
   background-color: white;
   padding: 15px;
@@ -129,6 +179,50 @@ form button:hover {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
+  animation: cardIn 0.4s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.task-card:hover {
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+@keyframes cardIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.task-card.card-exit {
+  animation: cardOut 0.3s ease forwards;
+  pointer-events: none;
+}
+
+@keyframes cardOut {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.85) translateX(30px);
+  }
+}
+
+.task-card.status-pulse {
+  animation: statusPulse 0.5s ease;
+}
+
+@keyframes statusPulse {
+  0% { box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); }
+  50% { box-shadow: 0 0 0 6px rgba(0, 123, 255, 0.15); }
+  100% { box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); }
 }
 
 .task-card h3 {
@@ -146,7 +240,6 @@ form button:hover {
   font-size: 14px;
 }
 
-/* ===== Priority Colors ===== */
 .low {
   border-left: 5px solid green;
 }
@@ -174,7 +267,6 @@ form button:hover {
   font-weight: bold;
 }
 
-/* ===== Status select inside card ===== */
 .status-label {
   display: flex;
   align-items: center;
@@ -191,9 +283,19 @@ form button:hover {
   font-size: 14px;
   background-color: #f9f9f9;
   cursor: pointer;
+  transition: border-color 0.2s ease, transform 0.15s ease;
 }
 
-/* ===== Buttons inside card ===== */
+.status-select:hover {
+  border-color: #007bff;
+}
+
+.status-select:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.15);
+}
+
 .card-actions {
   margin-top: 12px;
   display: flex;
@@ -206,6 +308,15 @@ form button:hover {
   border-radius: 5px;
   cursor: pointer;
   font-size: 13px;
+  transition: background-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+}
+
+.task-card button:hover {
+  transform: translateY(-2px) scale(1.05);
+}
+
+.task-card button:active {
+  transform: translateY(0) scale(0.94);
 }
 
 .delete-btn {
@@ -215,6 +326,7 @@ form button:hover {
 
 .delete-btn:hover {
   background-color: #b52a37;
+  box-shadow: 0 4px 10px rgba(220, 53, 69, 0.35);
 }
 
 .edit-btn {
@@ -224,9 +336,9 @@ form button:hover {
 
 .edit-btn:hover {
   background-color: #1e7e34;
+  box-shadow: 0 4px 10px rgba(40, 167, 69, 0.35);
 }
 
-/* ===== Empty state ===== */
 .empty-state {
   grid-column: 1 / -1;
   text-align: center;
@@ -235,9 +347,116 @@ form button:hover {
   font-size: 16px;
   background: white;
   border-radius: 10px;
+  animation: dropIn 0.4s ease;
 }
 
-/* ===== Responsive ===== */
+
+
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(20, 20, 30, 0);
+  backdrop-filter: blur(0px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  transition: background 0.2s ease, backdrop-filter 0.2s ease;
+}
+
+.modal-overlay.hidden {
+  display: none;
+}
+
+.modal-overlay.visible {
+  background: rgba(20, 20, 30, 0.5);
+  backdrop-filter: blur(3px);
+}
+
+.modal-box {
+  background: white;
+  border-radius: 14px;
+  padding: 28px 32px;
+  width: 90%;
+  max-width: 340px;
+  text-align: center;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+  transform: scale(0.8) translateY(10px);
+  opacity: 0;
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.2s ease;
+}
+
+.modal-overlay.visible .modal-box {
+  transform: scale(1) translateY(0);
+  opacity: 1;
+}
+
+.modal-icon {
+  font-size: 40px;
+  margin-bottom: 8px;
+  animation: wiggle 0.6s ease;
+}
+
+@keyframes wiggle {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-10deg); }
+  75% { transform: rotate(10deg); }
+}
+
+.modal-box h2 {
+  margin: 0 0 8px 0;
+  color: #222;
+  font-size: 20px;
+}
+
+.modal-box p {
+  margin: 0 0 20px 0;
+  color: #666;
+  font-size: 14px;
+  word-break: break-word;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.modal-actions button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+  transition: transform 0.15s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+#confirmCancelBtn {
+  background-color: #eee;
+  color: #333;
+}
+
+#confirmCancelBtn:hover {
+  background-color: #ddd;
+  transform: translateY(-2px);
+}
+
+.danger-btn {
+  background-color: #dc3545;
+  color: white;
+}
+
+.danger-btn:hover {
+  background-color: #b52a37;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(220, 53, 69, 0.4);
+}
+
+.modal-actions button:active {
+  transform: translateY(0) scale(0.95);
+}
 @media (max-width: 600px) {
   body {
     padding: 10px;
@@ -255,5 +474,15 @@ form button:hover {
   .toolbar select,
   .toolbar button {
     width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
   }
 }

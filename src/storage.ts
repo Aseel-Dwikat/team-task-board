@@ -8,6 +8,7 @@ export function getTasks(): Task[] {
   try {
     return JSON.parse(data) as Task[];
   } catch {
+    // إذا صار خطأ بالبيانات المخزنة، منرجع مصفوفة فاضية بدل ما البرنامج يطيح
     return [];
   }
 }

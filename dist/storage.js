@@ -7,6 +7,7 @@ export function getTasks() {
         return JSON.parse(data);
     }
     catch {
+        // إذا صار خطأ بالبيانات المخزنة، منرجع مصفوفة فاضية بدل ما البرنامج يطيح
         return [];
     }
 }

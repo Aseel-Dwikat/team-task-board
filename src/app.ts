@@ -1,8 +1,9 @@
 import type { Task, Priority, Status } from "./task.js";
 import { getTasks, addTask, updateTask, deleteTask, updateTaskStatus } from "./storage.js";
-import { renderTasks } from "./render.js";
+import { renderTasks, playDeleteAnimation, playStatusPulse } from "./render.js";
+import { confirmDialog } from "./modal.js";
 
-// elements
+
 const form = document.getElementById("taskForm") as HTMLFormElement;
 const taskIdInput = document.getElementById("taskId") as HTMLInputElement;
 const titleInput = document.getElementById("title") as HTMLInputElement;
@@ -13,7 +14,7 @@ const dueDateInput = document.getElementById("dueDate") as HTMLInputElement;
 const submitBtn = document.getElementById("submitBtn") as HTMLButtonElement;
 const cancelEditBtn = document.getElementById("cancelEditBtn") as HTMLButtonElement;
 
-//elemments for filters
+
 const searchInput = document.getElementById("searchInput") as HTMLInputElement;
 const statusFilter = document.getElementById("statusFilter") as HTMLSelectElement;
 const priorityFilter = document.getElementById("priorityFilter") as HTMLSelectElement;
@@ -22,10 +23,8 @@ const clearFiltersBtn = document.getElementById("clearFiltersBtn") as HTMLButton
 
 const taskBoard = document.getElementById("taskBoard") as HTMLElement;
 
-// state of app
 let editingTaskId: string | null = null;
 
-// validation 
 function clearFieldError(el: HTMLElement): void {
   el.classList.remove("field-error");
 }
@@ -33,7 +32,6 @@ function clearFieldError(el: HTMLElement): void {
 function markFieldError(el: HTMLElement): void {
   el.classList.add("field-error");
 }
-
 
 function validateForm(): boolean {
   let isValid = true;
@@ -58,11 +56,9 @@ function validateForm(): boolean {
   return isValid;
 }
 
-
 [titleInput, assigneeInput, dueDateInput].forEach((el) => {
   el.addEventListener("input", () => clearFieldError(el));
 });
-
 
 function enterEditMode(task: Task): void {
   editingTaskId = task.id;
@@ -90,14 +86,12 @@ function exitEditMode(): void {
 
 cancelEditBtn.addEventListener("click", exitEditMode);
 
-
 form.addEventListener("submit", (e) => {
   e.preventDefault();
 
   if (!validateForm()) return;
 
   if (editingTaskId) {
-  
     const existing = getTasks().find((t) => t.id === editingTaskId);
     if (!existing) return;
 
@@ -132,18 +126,18 @@ form.addEventListener("submit", (e) => {
   refreshBoard();
 });
 
-
-function handleDelete(id: string): void {
+async function handleDelete(id: string): Promise<void> {
   const task = getTasks().find((t) => t.id === id);
   const taskName = task ? task.title : "this task";
-  const confirmed = window.confirm(`Are you sure you want to delete "${taskName}"?`);
+  const confirmed = await confirmDialog(`Are you sure you want to delete "${taskName}"?`);
   if (!confirmed) return;
+
+  await playDeleteAnimation(taskBoard, id);
 
   deleteTask(id);
   if (editingTaskId === id) exitEditMode();
   refreshBoard();
 }
-
 
 function handleEdit(id: string): void {
   const task = getTasks().find((t) => t.id === id);
@@ -152,9 +146,14 @@ function handleEdit(id: string): void {
 
 function handleStatusChange(id: string, status: Status): void {
   updateTaskStatus(id, status);
-  refreshBoard();
-}
 
+  if (statusFilter.value && statusFilter.value !== status) {
+    refreshBoard();
+    return;
+  }
+
+  playStatusPulse(taskBoard, id);
+}
 
 function getFilteredAndSortedTasks(): { tasks: Task[]; hasActiveFilters: boolean } {
   let tasks = getTasks();
@@ -220,6 +219,5 @@ clearFiltersBtn.addEventListener("click", () => {
   sortSelect.value = "";
   refreshBoard();
 });
-
 
 refreshBoard();
