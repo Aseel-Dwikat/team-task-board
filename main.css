@@ -1,0 +1,259 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 20px;
+  background-color: #f4f6f8;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #222;
+}
+
+/* ===== Form ===== */
+form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 20px;
+  background: white;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+form input,
+form textarea,
+form select {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  width: 200px;
+  font-family: inherit;
+  font-size: 14px;
+}
+
+form textarea {
+  resize: none;
+  height: 40px;
+}
+
+/* حقل فيه خطأ (Validation) */
+.field-error {
+  border: 2px solid #dc3545 !important;
+  background-color: #fff5f5;
+}
+
+.form-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+form button {
+  padding: 10px 15px;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+form button:hover {
+  background-color: #0056b3;
+}
+
+#cancelEditBtn {
+  background-color: #6c757d;
+}
+
+#cancelEditBtn:hover {
+  background-color: #545b62;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* ===== Toolbar (Search / Filter / Sort) ===== */
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 20px;
+  background: white;
+  padding: 12px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.toolbar input,
+.toolbar select,
+.toolbar button {
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.toolbar button {
+  background-color: #eee;
+  cursor: pointer;
+  border: 1px solid #ccc;
+}
+
+.toolbar button:hover {
+  background-color: #ddd;
+}
+
+/* ===== Task Board ===== */
+#taskBoard {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 15px;
+  padding: 10px;
+}
+
+/* ===== Task Card ===== */
+.task-card {
+  background-color: white;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+}
+
+.task-card h3 {
+  margin: 0 0 10px 0;
+  word-break: break-word;
+}
+
+.task-card p {
+  margin: 5px 0;
+  word-break: break-word;
+}
+
+.task-desc {
+  color: #555;
+  font-size: 14px;
+}
+
+/* ===== Priority Colors ===== */
+.low {
+  border-left: 5px solid green;
+}
+
+.medium {
+  border-left: 5px solid orange;
+}
+
+.high {
+  border-left: 5px solid red;
+}
+
+.priority-low {
+  color: green;
+  font-weight: bold;
+}
+
+.priority-medium {
+  color: orange;
+  font-weight: bold;
+}
+
+.priority-high {
+  color: red;
+  font-weight: bold;
+}
+
+/* ===== Status select inside card ===== */
+.status-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  font-size: 14px;
+}
+
+.status-select {
+  flex: 1;
+  padding: 6px 8px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  background-color: #f9f9f9;
+  cursor: pointer;
+}
+
+/* ===== Buttons inside card ===== */
+.card-actions {
+  margin-top: 12px;
+  display: flex;
+  gap: 8px;
+}
+
+.task-card button {
+  padding: 6px 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.delete-btn {
+  background-color: #dc3545;
+  color: white;
+}
+
+.delete-btn:hover {
+  background-color: #b52a37;
+}
+
+.edit-btn {
+  background-color: #28a745;
+  color: white;
+}
+
+.edit-btn:hover {
+  background-color: #1e7e34;
+}
+
+/* ===== Empty state ===== */
+.empty-state {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 40px 20px;
+  color: #777;
+  font-size: 16px;
+  background: white;
+  border-radius: 10px;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 600px) {
+  body {
+    padding: 10px;
+  }
+
+  form,
+  .toolbar {
+    flex-direction: column;
+  }
+
+  form input,
+  form textarea,
+  form select,
+  .toolbar input,
+  .toolbar select,
+  .toolbar button {
+    width: 100%;
+  }
+}

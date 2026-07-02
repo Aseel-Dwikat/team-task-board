@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Team Task Board</title>
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+
+  <h1>Team Task Board</h1>
+
+  <form id="taskForm" novalidate>
+    <input type="hidden" id="taskId" value="">
+
+    <input type="text" id="title" placeholder="Task Title *">
+
+    <textarea id="description" placeholder="Description (optional)"></textarea>
+
+    <input type="text" id="assignee" placeholder="Assignee *">
+
+    <select id="priority">
+      <option value="Low">Low</option>
+      <option value="Medium" selected>Medium</option>
+      <option value="High">High</option>
+    </select>
+
+    <input type="date" id="dueDate">
+
+    <div class="form-buttons">
+      <button type="submit" id="submitBtn">Add Task</button>
+      <button type="button" id="cancelEditBtn" class="hidden">Cancel</button>
+    </div>
+  </form>
+
+  <div class="toolbar">
+    <input type="text" id="searchInput" placeholder="Search by title or assignee...">
+
+    <select id="statusFilter">
+      <option value="">All Statuses</option>
+      <option value="To Do">To Do</option>
+      <option value="In Progress">In Progress</option>
+      <option value="Done">Done</option>
+    </select>
+
+    <select id="priorityFilter">
+      <option value="">All Priorities</option>
+      <option value="Low">Low</option>
+      <option value="Medium">Medium</option>
+      <option value="High">High</option>
+    </select>
+
+    <select id="sortSelect">
+      <option value="">Sort by...</option>
+      <option value="dueDate">Due Date</option>
+      <option value="priority">Priority</option>
+      <option value="createdAt">Creation Date</option>
+    </select>
+
+    <button type="button" id="clearFiltersBtn">Clear Filters</button>
+  </div>
+
+  <div id="taskBoard"></div>
+
+  <script type="module" src="./dist/app.js"></script>
+
+</body>
+</html>
